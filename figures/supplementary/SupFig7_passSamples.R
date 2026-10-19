@@ -3,23 +3,9 @@
 #######################################
 
 suppressWarnings(suppressPackageStartupMessages({
-  library(dplyr)
-  library(plyr)
-  library(knitr)
-  library(vioplot)
-  library(corrplot)
-  library(ggplot2)
-  library(reshape2)
-  library(gridExtra)
-  library(cowplot)
-  library(kableExtra)
-  library(scales)
-  library(tibble)
-  library(plotly)
-  library(tidyr)
-  library(pheatmap)
-  library(cowplot)
   library(readr)
+  library(ggplot2)
+  library(cowplot)
   library(patchwork)
 }))
 
@@ -31,19 +17,29 @@ pass_fail_cols <- c(
   "TRUE"  = "#009E73"   # bluish green (pass)
 )
 
+pub_theme <- theme_classic(base_size = 12) +
+  theme(
+    axis.title = element_text(size = 15),
+    axis.text = element_text(size = 15),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    strip.text = element_text(size = 11 ),
+    plot.title = element_text(face = "bold", size = 14),
+    legend.key.width = unit(2.2, "cm")
+  )
+
 #######################
 ## Gather QC results ##
 #######################
 
-qcStatsD2 <- read_csv("./methodsPaper/data/QC1_D2.csv")
-qcStats2D2 <- read_csv("./methodsPaper/data/MS_alignmentRate.csv")
+qcStatsD2 <- read_csv("./data/QC1_D2.csv")
+qcStats2D2 <- read_csv("./data/MS_alignmentRate.csv")
 qcStatsD2 <- qcStatsD2[,-1]
 qcStats2D2 <- qcStats2D2[,-1]
 qc_cols <- c("PASS_AlignmentRate", "PASS_AlignedTotal", "PASS_NRF", "PASS_PBC1","PASS_PBC2","PASS_NFR","PASS_Mono" )
 qcStatsD2$PASSALL <-  as.factor(rowSums(qcStatsD2[, qc_cols]) == length(qc_cols))
 qcStatsD2$Ratio <- qcStatsD2$NFR/qcStatsD2$Mono
 qcStatsD2$aligned_total_reads <- qcStatsD2$aligned_total*2
-qcStatsD2[order(qcStatsD2$aligned_total, decreasing = TRUE),]$Sample
 
 passAllQCStatus <- as.data.frame(read_csv("./methodsPaper/passAllQCStatus.csv"))
 qc1StatsD1 <- read.table("./methodsPaper/qc1Stats.csv", header = TRUE, sep = ',', stringsAsFactors = FALSE)
@@ -142,7 +138,6 @@ p7b <- ggplot(
         plot.subtitle = element_text(size = 22,
                                      face = "bold",
                                      hjust = 0.5))
-p7b
 
 # ########################## Fig Sup 7.c ##################
 # Violin plot of TSS enrichment scores (y-axis)
@@ -183,7 +178,6 @@ p7c <- ggplot(
         plot.subtitle = element_text(size = 22,
                                      face = "bold",
                                      hjust = 0.5))
-p7c
 
 ## combine plots for figure ##
 figSup7 <- p7a | p7b | p7c + plot_layout(
