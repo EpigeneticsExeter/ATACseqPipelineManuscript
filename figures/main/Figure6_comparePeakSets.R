@@ -129,7 +129,7 @@ changeAnnotation_perPeaks <- function(df_sub){
 ## overlap peaks (shared)
 findPeaksOver <- function(gr1, gr2){
   
-  hits <- findOverlaps(gr1, gr2, ignore.curatedand = TRUE)
+  hits <- findOverlaps(gr1, gr2, ignore.strand = TRUE)
   
   unique_query <- unique(queryHits(hits))
   
@@ -144,7 +144,7 @@ findPeaksOverNo <- function(gr1,gr2){
 ## per-peak-pair jaccard index
 perPeakPairJaccard <- function(gr1, gr2) {
   
-  hits <- findOverlaps(gr1, gr2, ignore.curatedand = TRUE)
+  hits <- findOverlaps(gr1, gr2, ignore.strand = TRUE)
   q <- queryHits(hits)
   s <- subjectHits(hits)
   overlap_bp <- width(pintersect(gr1[q], gr2[s]))
@@ -208,7 +208,7 @@ for(i in 1:length(peakFiles)){
   peaks[[i]]<-makeGRangesFromDataFrame(read.table(file.path(peakFiles[i])), keep.extra.columns=TRUE, seqnames.field="V1",
                                        start.field="V2",
                                        end.field="V3",
-                                       ignore.curatedand=TRUE)
+                                       ignore.strand=TRUE)
   peaks[[i]] <- peaks[[i]][!seqnames(peaks[[i]]) %in% c("chrX", "chrY"),]
   peaks[[i]] <- as.data.frame(peaks[[i]])
   colnames(peaks[[i]]) <- c("chr", "start", "end", "width", "curatedand", "peakID", "score", "curatedand2", "signal", "pvalue", "qvalue", "score2")
@@ -233,7 +233,7 @@ for(i in 1:length(peakFiles)){
   peaks[[i]]<-makeGRangesFromDataFrame(read.table(file.path(paste0(peakFiles[i]))), keep.extra.columns=TRUE, seqnames.field="V1",
                                        start.field="V2",
                                        end.field="V3",
-                                       ignore.curatedand=TRUE)
+                                       ignore.strand=TRUE)
   peaks[[i]] <- peaks[[i]][!seqnames(peaks[[i]]) %in% c("chrX", "chrY"),]
   peaks[[i]] <- as.data.frame(peaks[[i]])
   colnames(peaks[[i]]) <- c("chr", "start", "end", "width", "curatedand", "peakID", "score", "curatedand2", "signal", "pvalue", "qvalue", "score2")
