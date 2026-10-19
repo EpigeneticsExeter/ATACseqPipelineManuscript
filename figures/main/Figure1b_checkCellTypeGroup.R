@@ -131,7 +131,7 @@ p1b <- ggplot(tpm.scores.df, aes(x=pc1, y=pc2, color =  fraction, shape = passed
          y=paste0("PC2: ", percentVar[2], "% variance"), 
          color = "Cell-type", 
          title    = "B", 
-         subtitle = "Outliers defined by negative silhouette coefficient", 
+         subtitle = "PCA of top 1000 cell type differential peaks", 
          shape = "Pass QC Stage 3") +
     theme_bw(base_size = 11) +
   theme(
