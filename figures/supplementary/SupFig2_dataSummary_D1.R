@@ -12,10 +12,6 @@ suppressWarnings(suppressPackageStartupMessages({
   library(scales)
 }))
 
-args <- commandArgs(trailingOnly=TRUE)
-configFile<-args[1]
-source(configFile)
-
 ## Universal theme for plotting ## 
 
 pub_theme <- theme_classic(base_size = 12) +
@@ -34,6 +30,15 @@ col_vals_pass <- c(
   "TRUE"  = "#009E73"   # bluish green (pass)
 )
 
+## QC thresholds used for paper ##
+nrfThres <- 0.7
+nucfThres <- 0.25
+monoThres <- 0.2
+alignThres <- 80
+numReads <- 50
+pbc1Thres <- 0.7
+pbc2Thres <- 1
+
 ## Load file with QC Stage 1 results ##
 qcStats <- read.csv("qcStage1Results.csv") 
 
@@ -48,7 +53,8 @@ dfa <- data.frame(
 
 p2a <- ggplot(dfa, aes( x = reads)) +
   geom_histogram(bins = 100,fill ='gray')+
-  labs( x = expression("Number of reads (" ~ x ~ 10^6 ~ ")"), y = "Number of samples", title = "A") +
+  labs( x = expression("Number of reads (" ~ x ~ 10^6 ~ ")"), 
+        y = "Number of samples", title = "A") +
   pub_theme +
   scale_x_continuous(
     labels = label_number(suffix = "", scale = 1e-6)
@@ -63,7 +69,7 @@ dfb <- data.frame(
 )
 
 p2b <- ggplot(dfb,aes(x =  reads))+
-geom_histogram(bins = 100,fill ='gray')+
+  geom_histogram(bins = 100,fill ='gray')+
   labs(x  = '% unique reads', y = "Number of samples", title = "B")+
   pub_theme 
 
@@ -78,7 +84,7 @@ p2c <- ggplot(align_f, aes(x = AlignmentRate,fill = qcpass))+
   geom_histogram(bins = 100)+
   geom_vline(xintercept=80, 
              color ='red')+
-             scale_fill_manual(values = col_vals_pass) +
+  scale_fill_manual(values = col_vals_pass) +
   labs(x  = '% Alignment rate', y = "Number of samples", title = "C", fill = "PASS")+
   pub_theme 
 
@@ -92,9 +98,10 @@ p2d <- ggplot(qcStats, aes(x = TotalNumReads,fill = qcpass))+
   geom_vline(xintercept=numReads*10^6,
              color ='red')+
   scale_fill_manual(values = col_vals_pass) +           
-  labs(x =  expression("Number of reads aligned (" ~ x ~ 10^6 ~ ")"), y = "Number of samples", fill = "PASS",title = "D")+
+  labs(x =  expression("Number of reads aligned (" ~ x ~ 10^6 ~ ")"),
+       y = "Number of samples", fill = "PASS",title = "D")+
   pub_theme +
-	scale_x_continuous(labels = label_number(suffix = " ", scale = 1e-6))
+  scale_x_continuous(labels = label_number(suffix = " ", scale = 1e-6))
 
 # ########################## Sup Fig 2.e #################
 # Histogram of % of mitochondrial reads per sample
@@ -150,8 +157,8 @@ p2i <- ggplot(eMetrics_h, aes(x = NRF, fill = qcpass)) +
   scale_fill_manual(values = col_vals_pass) +
   labs(x = 'NRF', y = "Number of samples", title = "I", fill = "PASS") +
   pub_theme + geom_vline(xintercept = nrfThres, color = "red")+ theme(
-  legend.position = "none"
-)
+    legend.position = "none"
+  )
 
 # ########################## Sup Fig 2.j #################
 # Histogram of %NFR metric per sample
@@ -193,10 +200,10 @@ p2j <- p2j + theme(legend.position = "none")
 p2k <- p2k + theme(legend.position = "bottom")
 
 supFig2 <- (p2a + p2b + p2c +
-  p2d + p2e + p2f +
-  p2h + p2i + p2f + 
-  p2j + p2k + 
-  plot_layout( design = "
+              p2d + p2e + p2f +
+              p2h + p2i + p2f + 
+              p2j + p2k + 
+              plot_layout( design = "
 AAABBB
 AAABBB
 CCCDDD
@@ -208,15 +215,15 @@ GGHHII
 JJJKKK
 JJJKKK
 "
+              )
 )
-  )
 
 ggsave(
   filename = paste0("SupplementaryFig_2_D1.png"),
   plot = supFig2,
   width = 13,
   height = 17)
-  
+
 ggsave(
   filename = paste0("SupplementaryFig_2_D1.pdf"),
   plot = supFig2,
