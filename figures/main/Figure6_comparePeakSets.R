@@ -519,6 +519,12 @@ D1_D2_default_SOX$threshold <- "default"
 D1_D2_curated_SOX$threshold <- "curated"
 D1_D2_default_SOX$cellType <- "SOX10+"
 D1_D2_curated_SOX$cellType <- "SOX10+"
+D1_D2 <- rbind(
+  D1_D2_default_NEUN,
+  D1_D2_curated_NEUN,
+  D1_D2_default_SOX,
+  D1_D2_curated_SOX
+)
 D1_D2$peaksets <- paste0(D1_D2$cellType, " ",D1_D2$threshold )
 
 # ########################## Fig 6.b ############################
@@ -569,7 +575,7 @@ panel_top <- (p6a1 | p6a2) +
 p6c1_clean <- p6c1 + theme(legend.position = "none")
 p6c2_clean <- p6c2 + theme(legend.position = "right")
 
-bottom_pannel <- p6b | p6c1_clean | p6c2_clean |  
+bottom_pannel <- p6b | p6c1_clean | p6c2_clean 
                            
 figure6 <- panel_top / bottom_pannel  +
   plot_layout(heights = c(1.25,1))
