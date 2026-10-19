@@ -2,14 +2,16 @@
 ##       Supplementary Fig 9      ##
 ####################################
 
-library(ChIPpeakAnno)
-library(ChIPseeker)
-library(TxDb.Hsapiens.UCSC.hg38.knownGene)
-library(forcats)
-library(stringr)
-library(EnsDb.Hsapiens.v86)
-library(AnnotationFilter)
-library(ensembldb)
+suppressWarnings(suppressPackageStartupMessages({
+  library(EnsDb.Hsapiens.v86)
+  library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+  library(ChIPpeakAnno)
+  library(ChIPseeker)
+  library(forcats)
+  library(stringr)
+  library(AnnotationFilter)
+  library(ggplot2)
+}))
 
 ## brain genes list ##
 brainGenes <- read.table("./brainGenes.txt")[,1]
