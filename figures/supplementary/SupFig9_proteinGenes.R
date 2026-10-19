@@ -256,7 +256,7 @@ calculatePeaksGenes <- function(peakAnno, setName){
     ) %>%
     dplyr::mutate(
       peak_set = setName
-    
+    )
   list(
     summary = tibble::tibble(
       name = setName,
