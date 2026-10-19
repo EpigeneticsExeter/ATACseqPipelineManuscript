@@ -11,6 +11,8 @@ suppressWarnings(suppressPackageStartupMessages({
   library(stringr)
   library(AnnotationFilter)
   library(ggplot2)
+  library(cowplot)
+  library(patchwork)
 }))
 
 ## brain genes list ##
