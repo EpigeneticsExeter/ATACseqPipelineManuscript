@@ -12,9 +12,7 @@ suppressWarnings(suppressPackageStartupMessages({
   library(scales)
 }))
 
-args <- commandArgs(trailingOnly=TRUE)
-configFile<-args[1]
-source(configFile)
+
 
 ## Universal theme for plotting ## 
 
@@ -34,6 +32,15 @@ col_vals_pass <- c(
   "TRUE"  = "#009E73"   # bluish green (pass)
 )
 
+## QC thresholds used for paper ##
+nrfThres <- 0.7
+nucfThres <- 0.25
+monoThres <- 0.2
+alignThres <- 80
+numReads <- 50
+pbc1Thres <- 0.7
+pbc2Thres <- 1
+
 ## Load file with QC Stage 1 results ##
 qcStats <- read.csv("qcStage1Results_D2.csv") 
 
@@ -47,7 +54,8 @@ dfa <- data.frame(
 
 p3a <- ggplot(dfa, aes( x = reads)) +
   geom_histogram(bins = 100,fill ='gray')+
-  labs( x = expression("Number of reads (" ~ x ~ 10^6 ~ ")"), y = "Number of samples", title = "A") +
+  labs( x = expression("Number of reads (" ~ x ~ 10^6 ~ ")"), 
+        y = "Number of samples", title = "A") +
   pub_theme +
   scale_x_continuous(
     labels = label_number(suffix = " ", scale = 1e-6)
@@ -65,7 +73,8 @@ p3b <- ggplot(align_f, aes(x = overall_alignment_rate,fill = qcpass))+
   geom_vline(xintercept=80,
              color ='red')+
   scale_fill_manual(values = col_vals_pass) +
-  labs(x  = '% Alignment rate', y = "Number of samples", title = "B", 
+  labs(x  = '% Alignment rate', 
+       y = "Number of samples", title = "B", 
        fill = "PASS")+
   pub_theme +
   theme(legend.position = "none")
@@ -80,7 +89,8 @@ p3c <- ggplot(qcStats, aes(x = aligned_total,fill = qcpass))+
   geom_vline(xintercept=numReads*10^6,
              color ='red')+
   scale_fill_manual(values = col_vals_pass) +           
-  labs(x = expression("Number of reads aligned (" ~ x ~ 10^6 ~ ")"), y = "Number of samples", 
+  labs(x = expression("Number of reads aligned (" ~ x ~ 10^6 ~ ")"),
+       y = "Number of samples", 
        fill = "PASS",title = "C")+
   pub_theme +
   scale_x_continuous(labels = label_number(suffix = "", scale = 1e-6))
@@ -145,7 +155,7 @@ p3g <- ggplot(propNuc_j, aes(x = NFR, fill = qcpass)) +
 # Samples coloured by pass/fail based on threshold (>0.2), shown as vertical red line
 
 propNuc_k <-qcStats
-propNuc_k$qcpass <- ifelse(qcStats$monoThres > 0.2, "TRUE", "FALSE")
+propNuc_k$qcpass <- ifelse(qcStats$Mono > 0.2, "TRUE", "FALSE")
 
 p3h <- ggplot(propNuc_k, aes(x = Mono, fill = qcpass)) +
   geom_histogram(bins = 100) +
@@ -179,18 +189,18 @@ GGGHHH
 ..LL..
 "
 supFig3 <- (p3a + p3b + p3c +
-                      p3d + p3e + p3f +
-                      p3g + p3h +  legend_shared + 
-                      plot_layout(ncol = 2, heights = c(1,1,1,1,0.25))+ 
-plot_layout(guides = "collect"             
-) & theme(legend.position = "none"))
+              p3d + p3e + p3f +
+              p3g + p3h +  legend_shared + 
+              plot_layout(ncol = 2, heights = c(1,1,1,1,0.25))+ 
+              plot_layout(guides = "collect"             
+              ) & theme(legend.position = "none"))
 
 ggsave(
   filename = paste0("SupplementaryFig_3_D2.png"),
   plot = supFig3,
   width = 13,
   height = 17)
-  
+
 ggsave(
   filename = paste0("SupplementaryFig_3_D2.pdf"),
   plot = supFig3,
