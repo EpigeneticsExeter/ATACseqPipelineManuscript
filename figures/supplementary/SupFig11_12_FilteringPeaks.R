@@ -2,14 +2,19 @@
 ##       Supplementary Fig 11,12      ##
 ########################################
 
-library(tidyr)
-library(dplyr)
-library(stringr)
-library(ggplot2)
-library(purrr)
-library(reshape2)
-library(patchwork)
-library(tibble)
+suppressWarnings(suppressPackageStartupMessages({
+  library(tidyr)
+  library(dplyr)
+  library(stringr)
+  library(ggplot2)
+  library(purrr)
+  library(reshape2)
+  library(patchwork)
+  library(tibble)
+  library(cowplot)
+}))
+
+options(scipen = 5)
 
 ## Universal theme for plotting
 pub_theme <- theme_classic(base_size = 12) +
