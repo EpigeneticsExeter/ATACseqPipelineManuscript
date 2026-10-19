@@ -2,17 +2,17 @@
 ##       Supplementary Fig 14      ##
 #####################################
 
-library(pheatmap)
-library(RColorBrewer)
-library(tibble)
-library(dplyr)
-library(ChIPpeakAnno)
-library(ChIPseeker)
-library(TxDb.Hsapiens.UCSC.hg38.knownGene)
-library(org.Hs.eg.db)
-library(patchwork)
-library(ggplot2)
-library(tidyr)
+suppressWarnings(suppressPackageStartupMessages({
+  library(tibble)
+  library(dplyr)
+  library(ChIPpeakAnno)
+  library(ChIPseeker)
+  library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+  library(org.Hs.eg.db)
+  library(patchwork)
+  library(ggplot2)
+  library(tidyr)
+}))
 
 ###############
 ## functions ##
@@ -55,13 +55,13 @@ colorBlindGrey8   <- c("#009E73", "#CC79A7", "#D55E00", "#999999",
 ######################
 
 cf <- rep("NeuN+", "SOX10+",2)
-strPeaks <-"./methodsPaper/data/strPeakSets/"
-relaxPeaks <-"./methodsPaper/data/relaxedPeakSets/"
+curatedPeaks <-"./data/curatedPeaks/"
+defaultPeaks <-"./data/defaultPeaks/"
 
-peakFiles<-c(paste0(relaxPeaks,"neun_q5e-2.narrowPeak.filt"),
-             paste0(relaxPeaks,"sox10_q5e-2.narrowPeak.filt"),
-             paste0(strPeaks,"neun_q1e-16.narrowPeak.filt"),
-             paste0(strPeaks,"sox10_q1e-18.narrowPeak.filt"))
+peakFiles<-c(paste0(defaultPeaks,"neun_q5e-2.narrowPeak.filt"),
+             paste0(defaultPeaks,"sox10_q5e-2.narrowPeak.filt"),
+             paste0(curatedPeaks,"neun_q1e-16.narrowPeak.filt"),
+             paste0(curatedPeaks,"sox10_q1e-18.narrowPeak.filt"))
 
 print("Peaks files: ")
 print(peakFiles)
@@ -84,10 +84,10 @@ print(lapply(peaks, function(i) length(i)))
 names(peaks) <- c("NeuN+_D2_default", "SOX10+_D2_default","NeuN+_D2_curated", "SOX10+_D2_curated")
 peaks.D2.df <- peaks
 
-peakFiles<-c(paste0(relaxPeaks,"NEUN_5e-2.narrowPeak.filt"),
-             paste0(relaxPeaks,"SOX_5e-2.narrowPeak.filt"),
-             paste0(strPeaks,"NEUN_1e-32.narrowPeak.filt"),
-             paste0(strPeaks,"SOX_1e-25.narrowPeak.filt"))
+peakFiles<-c(paste0(defaultPeaks,"NEUN_5e-2.narrowPeak.filt"),
+             paste0(defaultPeaks,"SOX_5e-2.narrowPeak.filt"),
+             paste0(curatedPeaks,"NEUN_1e-32.narrowPeak.filt"),
+             paste0(curatedPeaks,"SOX_1e-25.narrowPeak.filt"))
 print("Peaks files: ")
 print(peakFiles)
 peaks<-list()
@@ -131,13 +131,13 @@ NEUNoverno_str.D1 <- findPeaksOverNo(peak_groups.D1.gr[[3]], peak_groups.D2.gr[[
 NEUNoverno_str.D2 <- findPeaksOverNo(peak_groups.D2.gr[[3]], peak_groups.D1.gr[[3]])
 
 overPeaks.NEUN <- list(NEUNover_relax.D1,NEUNover_relax.D2,
-                  NEUNoverno_relax.D1,NEUNoverno_relax.D2,
-                  NEUNover_str.D1,NEUNover_str.D2,
-                  NEUNoverno_str.D1,NEUNoverno_str.D2)
+                       NEUNoverno_relax.D1,NEUNoverno_relax.D2,
+                       NEUNover_str.D1,NEUNover_str.D2,
+                       NEUNoverno_str.D1,NEUNoverno_str.D2)
 names(overPeaks.NEUN)<- c("NeuN+\nshared\ndefault\nD1", "NeuN+\nnshared\ndefault\nD2",
-                     "NeuN+\nspecific\ndefault\nD1", "NeuN+\nspecific\ndefault\nD2",
-                     "NeuN+\nnshared\ncurated\nD1", "NeuN+\nnshared\ncurated\nD2",
-                     "NeuN+\nspecific\ncurated\nD1", "NeuN+\nspecific\ncurated\nD2")
+                          "NeuN+\nspecific\ndefault\nD1", "NeuN+\nspecific\ndefault\nD2",
+                          "NeuN+\nnshared\ncurated\nD1", "NeuN+\nnshared\ncurated\nD2",
+                          "NeuN+\nspecific\ncurated\nD1", "NeuN+\nspecific\ncurated\nD2")
 peaksAnno.all<-lapply(overPeaks.NEUN,annotatePeak,
                       TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene, 
                       annoDb="org.Hs.eg.db", verbose = FALSE)
@@ -158,18 +158,18 @@ SOXover_str.D2 <- findPeaksOver(peak_groups.D2.gr[[4]], peak_groups.D1.gr[[4]])
 SOXoverno_str.D1 <- findPeaksOverNo(peak_groups.D1.gr[[4]], peak_groups.D2.gr[[4]])
 SOXoverno_str.D2 <- findPeaksOverNo(peak_groups.D2.gr[[4]], peak_groups.D1.gr[[4]])
 
-overPeaksSOX <- list(SOXover_relax.D1,SOXover_relax.D2,
+overPeaks.SOX <- list(SOXover_relax.D1,SOXover_relax.D2,
                      SOXoverno_relax.D1,SOXoverno_relax.D2,
                      SOXover_str.D1,SOXover_str.D2,
                      SOXoverno_str.D1,SOXoverno_str.D2)
-names(overPeaksSOX)<- c("SOX10\nshared\ndefault\nD1", "SOX10\nnshared\ndefault\nD2",
+names(overPeaks.SOX)<- c("SOX10\nshared\ndefault\nD1", "SOX10\nnshared\ndefault\nD2",
                         "SOX10\nspecific\ndefault\nD1", "SOX10\nspecific\ndefault\nD2",
                         "SOX10\nnshared\ncurated\nD1", "SOX10\nnshared\ncurated\nD2",
                         "SOX10\nspecific\ncurated\nD1", "SOX10\nspecific\ncurated\nD2")
-peaksAnno.all.SOX<-lapply(overPeaksSOX,annotatePeak,
-                      TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene, 
-                      annoDb="org.Hs.eg.db", verbose = FALSE)
-names(peaksAnno.all.SOX) <- names(overPeaksSOX)
+peaksAnno.all.SOX<-lapply(overPeaks.SOX,annotatePeak,
+                          TxDb=TxDb.Hsapiens.UCSC.hg38.knownGene, 
+                          annoDb="org.Hs.eg.db", verbose = FALSE)
+names(peaksAnno.all.SOX) <- names(overPeaks.SOX)
 peaksAnno.df.SOX<- lapply(peaksAnno.all.SOX, function(x) as.data.frame(x@anno))
 
 # ########################## Fig Sup 14.a ###########################################
@@ -228,7 +228,7 @@ p14A1 <- ggplot(
     breaks = seq(0, 100, 20)
   ) +
   labs(
-    title = "A", subtitle = "NeuN",
+    title = "A", subtitle = "NeuN+",
     y = "Peak set",
     x = "% of peaks",
     fill = " "
@@ -277,7 +277,7 @@ p14A2 <- ggplot(
     breaks = seq(0, 100, 20)
   ) +
   labs(
-    title = " ", subtitle = "SOX10",
+    title = " ", subtitle = "SOX10+",
     y = "Peak set",
     x = "% of peaks",
     fill = " "
@@ -297,7 +297,7 @@ p14A2 <- ggplot(
       hjust = 0.5
     )
   )
-                          
+
 # ########################## Fig Sup 14.b ###########################################
 # Stacked bar plots of % of genes annotated to peaks that are related to brain for 
 # shared vs specific peak sets                          
@@ -394,7 +394,7 @@ p14B1 <- ggplot(
     )
   ) +
   labs(
-    title = "B",subtitle = "NeuN",
+    title = "B",subtitle = "NeuN+",
     y = "Peak set",
     x = "% of annotated genes",
     fill = "Gene annotation"
@@ -402,7 +402,7 @@ p14B1 <- ggplot(
   pub_theme +
   theme(
     axis.title = element_text(size = 14),
-    axis.text.x = element_text(size = 12) ,#angle = 45, hjust =1),
+    axis.text.x = element_text(size = 12) ,
     legend.title = element_text(size = 11),
     legend.text = element_text(size = 10),
     plot.title = element_text(size = 24,face = "bold",hjust = -0.25),
@@ -444,7 +444,7 @@ p14B2 <- ggplot(
     )
   ) +
   labs(
-    title = " ",subtitle = "SOX10",
+    title = " ",subtitle = "SOX10+",
     y = "Peak set",
     x = "% of annotated genes",
     fill = "Gene annotation"
@@ -484,4 +484,3 @@ ggsave(
   width = 20,
   height = 15
 )
-                         
