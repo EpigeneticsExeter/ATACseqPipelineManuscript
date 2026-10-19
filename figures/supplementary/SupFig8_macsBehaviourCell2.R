@@ -2,14 +2,17 @@
 ##       Supplementary Fig 8       ##
 #####################################
 
-library(ggplot2)
-library(GenomicRanges)
-library(dplyr)
-library(tidyr)
-library(stringr)
-library(forcats)
-library(patchwork)
-library(cowplot)
+suppressWarnings(suppressPackageStartupMessages({
+  library(ggplot2)
+  library(GenomicRanges)
+  library(dplyr)
+  library(tidyr)
+  library(stringr)
+  library(forcats)
+  library(patchwork)
+  library(cowplot)
+}))
+
 options(scipen = 5)
 
 ## settings for plotting ##
@@ -34,7 +37,7 @@ col_vals <- c("0.05" = "#56B4E9","0.01" = "salmon","0.00001" = "#009E73")
 ## Gather peak sets ##
 ######################
 
-groupsPeaks <-"./methodsPaper/data/downReads/"
+groupsPeaks <-"./data/downReads/"
 peakFiles<-list.files(groupsPeaks, pattern=paste0(cf,"_1e-2.*\\.narrowPeak\\.filt|",cf,"_5e-2.*\\.narrowPeak\\.filt|",cf,"_1e-5.*\\.narrowPeak\\.filt"))
 files_readsAll <- peakFiles[grepl("_\\d+readsAll\\.narrowPeak\\.filt", peakFiles)]
 files_readsAll <- files_readsAll[grepl(cf, files_readsAll, ignore.case = TRUE)]
@@ -103,15 +106,18 @@ widthPeaks_df <- data.frame(
 widthPeaks_df$set_num <- as.integer(str_extract(widthPeaks_df$set, "(?<=_)[0-9]+(?=readsAll)"))
 sum(widthPeaks_df[widthPeaks_df$set_num == 100,]$width)
 
-p8c <-ggplot(widthPeaks_df, aes(x = factor(set_num), y = log10(width)))+ 
+p8c <-ggplot(widthPeaks_df, aes(x = factor(set_num), y = width))+ 
+  scale_y_log10()+
   geom_violin(scale = "width", fill = "#56B4E9") +
   geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.4,fill = 'black') +
   stat_summary(fun = median, geom = "point", color = "white") +
-  labs(x = expression("Read pairs (" ~ x ~ 10^7 ~ ")"), y = "Peak width (bp, log10 scale)", title = "C") +
+  labs(x = expression("Read pairs (" ~ x ~ 10^7 ~ ")"), 
+       y = expression("Peak width (bp; log"[10]*" scale)"),
+       title = "C") +
   pub_theme +
   theme(
     legend.position = "none", plot.title = element_text(size = 24)
-  ) 
+  )  
 
 # ########################## Fig Sup 8.d ###########################################
 # Violin plot of space between peaks (y-axis)
@@ -139,17 +145,18 @@ peaksAnno.all.df.space <- bind_rows(peaksAnno.all.df)
 peaksAnno.all.df.space$set_num <- as.integer(str_extract(peaksAnno.all.df.space$set, 
                                                          "(?<=_)[0-9]+(?=readsAll)"))
 
-p8d <- ggplot(peaksAnno.all.df.space, aes(x = factor(set_num), y = log10(spacing)))+ 
+p8d <- ggplot(peaksAnno.all.df.space, aes(x = factor(set_num), y = spacing))+ 
   geom_violin(scale = "width", fill = "#56B4E9")+
+  scale_y_log10()+
   geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.4,fill = 'black') +
   stat_summary(fun = median, geom = "point", color = "white")  +
   labs(x = expression("Read pairs (" ~ x ~ 10^7 ~ ")"), 
-  y = "Gap between peaks (bp, log10 scale)",title = "D") +
+       y = expression("Gap between peaks (bp; log"[10]*" scale)"),
+       title = "D") +
   pub_theme +
   theme(
     legend.position = "none", plot.title = element_text(size = 24)
   ) 
-p8d
 
 # ########################## Fig Sup 8.b ###########################################
 # Line plot of number of peaks (y-axis)
@@ -170,7 +177,8 @@ peaksAnno.all.df.space$group <- cut(
   include.lowest = TRUE
 )
 
-plot_df <- peaksAnno.all.df.space %>% dplyr::count(set_num, group)
+plot_df <- peaksAnno.all.df.space %>% 
+  dplyr::count(set_num, group)
 
 p8b <-ggplot(plot_df, aes(x = set_num, y = n, group=group, color = group)) +
   geom_point() +
