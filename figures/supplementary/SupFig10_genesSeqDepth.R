@@ -2,10 +2,15 @@
 ##       Supplementary Fig 10      ##
 #####################################
 
-library(ChIPpeakAnno)
-library(ChIPseeker)
-library(TxDb.Hsapiens.UCSC.hg38.knownGene)
-library(forcats)
+suppressWarnings(suppressPackageStartupMessages({
+  library(ChIPpeakAnno)
+  library(ChIPseeker)
+  library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+  library(forcats)
+  library(ggplot2)
+  library(cowplot)
+  library(patchwork)
+}))
 
 ## brain genes
 brainGenes <- read.table("./brainGenes.txt")[,1]
@@ -13,7 +18,7 @@ brainGenes <- unique(brainGenes)
 brainGenes <- sub("\\..*$", "", brainGenes)
 
 txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
-groupsPeaks <-"C:/Users/mf662/OneDrive - University of Exeter/Desktop/methodsPaper/data/downReads/"
+groupsPeaks <-"./data/downReads/"
 col_vals <- c("0.05" = "#56B4E9","0.01" = "salmon","0.00001" = "#009E73")
 shape_vals_ct <- c("NeuN+" = "solid", "SOX10+" = "dotted")
 
