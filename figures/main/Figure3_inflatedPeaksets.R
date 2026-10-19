@@ -5,8 +5,9 @@
 library(tidyr)
 library(dplyr)
 library(GenomicRanges)
+library(patchwork)
 
-groupsPeaks <- "/dir/to/peak/sets/"
+groupsPeaks <-"path/To/peak/files"
 
 format_q_label <- function(q) {
   
@@ -57,7 +58,6 @@ for(file in allPeakFiles){
 
 names(peaks) <- gsub(groupsPeaks, "", names(peaks))
 names(peaks) <- gsub(paste0(groupsPeaks, "/"), "", names(peaks))
-lapply(peaks, nrow)
 width <- lapply(peaks, width)
 totalwidth <- lapply(width, sum)
 
@@ -108,7 +108,7 @@ p3a <- ggplot(df, aes(
   scale_x_continuous(
     breaks = c(1.3, seq(10, 100, by = 5)),
     labels = c("1.3", seq(10, 100, by = 5)),
-    name = expression("Q value threshold (" * 10^{-n} * ")")
+   name = expression("-log"[10]*" (Q value)")
   )+
   geom_line(linewidth = 1) +
   labs(
@@ -170,7 +170,6 @@ plot_df$threshold_exp <- ifelse(
 )
 
 p3b <-ggplot(plot_df, aes(x = threshold_log, y = n, group=group, color = group)) +
-  #  geom_point() +
   geom_line(linewidth = 1)+
   labs(
     x = "Q value",
@@ -179,7 +178,7 @@ p3b <-ggplot(plot_df, aes(x = threshold_log, y = n, group=group, color = group))
   scale_x_continuous(
     breaks = c(1.3, seq(10, 100, by = 5)),
     labels = c("1.3",seq(10, 100, by = 5)),
-    name = expression("Q value threshold (" * 10^{-n} * ")")
+    name = expression("-log"[10]*" (Q value)")
   )+
   theme_minimal(base_size = 14) +
   pub_theme +
@@ -205,8 +204,6 @@ peaks.df$n_samples_group <- cut(
   include.lowest = TRUE
 )
 
-table(peaks.df$qValuegroup)   # q-value bins (factor)
-table(peaks.df$n_samples_group)     # number of samples per peak
 peaks.df$qValuegroup <- factor(peaks.df$qValuegroup)
 peaks.df$n_samples_group <- factor(peaks.df$n_samples_group)
 tab <- table(peaks.df$qValuegroup, peaks.df$n_samples_group)
@@ -223,12 +220,11 @@ df_plot$threshold_exp <- ifelse(
 )
 
 p3c <-ggplot(df_plot, aes(x = threshold_log, y = count, group=n_samples, color = n_samples)) +
-
   geom_line(linewidth = 1)+
   scale_x_continuous(
     breaks = c(1.3, seq(10, 100, by = 5)),
     labels = c("1.3", seq(10, 100, by = 5)),
-    name = expression("Q value threshold (" * 10^{-n} * ")")
+      name = expression("-log"[10]*" (Q value)")
   )+scale_color_manual(values = colorBlindGrey8)+
   labs(
     y = "Number of peaks", title = "C", color = "Number of samples\noverlap"
@@ -241,7 +237,6 @@ p3c <-ggplot(df_plot, aes(x = threshold_log, y = count, group=n_samples, color =
 # ########################## Fig 3d ###########################################
 # Violin plots of distribution of number of samples overlap with (y-axis)
 # q-value threshold (x-axis). 
-
 
 exponents <- seq(-10, -100, by = -5)
 thresholds <- sort(c(0.05,10^exponents))
@@ -278,7 +273,7 @@ p3d<- ggplot(peaks.df, aes(x = threshold_exp, y = n_samples))+
   stat_summary(fun = median, geom = "point", color = "white")+
   scale_x_discrete(
     labels = c("1.3", seq(10, 100, 5)),
-    name = expression("Q value threshold (" * 10^{-n} * ")")
+    name = expression("-log"[10]*" (Q value)")
   )+
   labs( y = "Samples overlap", title = "D") +
   pub_theme +
