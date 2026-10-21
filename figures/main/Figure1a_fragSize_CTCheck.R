@@ -82,7 +82,7 @@ propNucleosomesAll <-as.data.frame(propNucleosomesAll)
 
 ## plot nucleosome periodicity
 propNucleosomesAll.2 <-as.data.frame(propNucleosomesAll)
-colnames(propNucleosomesAll.2) <- c("Nuc-Free", "Mono-Nuc", "Di", "Tri", "Quad")
+colnames(propNucleosomesAll.2) <- c("Nuc-Free", "Mono-Nuc", "Di-Nuc", "Tri-Nuc", "Quad-Nuc")
 propNucleosomesAll.2$fraction <- pheno[match(rownames(propNucleosomesAll.2), pheno$sampleID),]$fraction
 propNucleosomesAll.2$cohort <- pheno[match(rownames(propNucleosomesAll.2), pheno$sampleID),]$cohort
 propNucleosomesAll.2$sequencingBatch <- pheno[match(rownames(propNucleosomesAll.2), pheno$sampleID),]$sequencingBatch
@@ -99,7 +99,7 @@ melt.df$FragSize <- as.factor(melt.df$FragSize)
 
 melt.df$FragSize <- factor(
   melt.df$FragSize,
-  levels = c("Nuc-Free", "Mono-Nuc", "Di", "Tri", "Quad")
+  levels = c("Nuc-Free", "Mono-Nuc", "Di-Nuc", "Tri-Nuc", "Quad-Nuc")
 )
 
 # ########################## Fig 1.a1 ###########################################
