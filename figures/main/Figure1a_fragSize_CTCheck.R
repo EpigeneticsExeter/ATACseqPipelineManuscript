@@ -5,15 +5,16 @@
 args <- commandArgs(trailingOnly=TRUE)
 configFile<-args[1]
 source(configFile)
-library(ggplot2)
-library(ATACseqQC)
-library(plyr)
-library(gridExtra)
-library(ggpubr)
-library(dplyr)
-library(reshape2)
-library(tidyr)
-
+suppressWarnings(suppressPackageStartupMessages({
+  library(ggplot2)
+  library(ATACseqQC)
+  library(plyr)
+  library(gridExtra)
+  library(ggpubr)
+  library(dplyr)
+  library(reshape2)
+  library(tidyr)
+}))
 ## parameters ##
 outputDir <- "/dir/to/plot/file"
 qc1pass <- "/dir/to/qc/stage/1/output/file.csv"
