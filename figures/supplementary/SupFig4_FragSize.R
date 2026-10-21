@@ -92,8 +92,8 @@ if(nSamples > 0){
   axis1 <- seq(from = 0, to = max(fdValues[,1]), by = 100)
   
   qc_text <- paste0(
-    "NFR: ", round(qcMetrics$NFR[i],3),
-    "\nMNC: ", round(qcMetrics$MNC[i],3)
+    "Nuc-Free: ", round(qcMetrics$NFR[i],3),
+    "\nMono-Nuc: ", round(qcMetrics$MNC[i],3)
   )
   
   p[[i]] <- ggplot(fdValues, aes(x = Var1, y = Freq)) +
