@@ -2,10 +2,12 @@
 ##       Figure 1 b-g     ##
 ############################
 
-library(edgeR)
-library(ggplot2)
-library(DESeq2)
-library(cluster)
+suppressWarnings(suppressPackageStartupMessages({
+  library(edgeR)
+  library(ggplot2)
+  library(DESeq2)
+  library(cluster)
+}))
 
 ## universal theme for plotting ##
 pub_theme <- theme_classic(base_size = 12) +
