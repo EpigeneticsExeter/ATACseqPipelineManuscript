@@ -3,17 +3,19 @@
 ##       Figure 6       ##
 ##########################
 
-library(pheatmap)
-library(RColorBrewer)
-library(tibble)
-library(dplyr)
-library(ChIPpeakAnno)
-library(ChIPseeker)
-library(TxDb.Hsapiens.UCSC.hg38.knownGene)
-library(org.Hs.eg.db)
-library(patchwork)
-library(ggplot2)
-library(tidyr)
+suppressWarnings(suppressPackageStartupMessages({
+  library(pheatmap)
+  library(RColorBrewer)
+  library(tibble)
+  library(dplyr)
+  library(ChIPpeakAnno)
+  library(ChIPseeker)
+  library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+  library(org.Hs.eg.db)
+  library(patchwork)
+  library(ggplot2)
+  library(tidyr)
+}))
 
 ###############
 ## functions ##
