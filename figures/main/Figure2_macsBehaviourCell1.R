@@ -2,10 +2,12 @@
 ##       Figure 2      ##
 #########################
 
-library(TxDb.Hsapiens.UCSC.hg38.knownGene)
-library(GenomicRanges)
-library(ggplot2)
-library(tidyverse)
+suppressWarnings(suppressPackageStartupMessages({
+  library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+  library(GenomicRanges)
+  library(ggplot2)
+  library(tidyverse)
+}))
 
 groupsPeaks <- "/dir/to/peak/sets"
 
