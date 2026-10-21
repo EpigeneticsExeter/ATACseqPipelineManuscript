@@ -127,7 +127,7 @@ p7b <- ggplot(
   scale_fill_manual(values = pass_fail_cols) +
   labs(
     x = "",
-    y = "NFR/MNC", title = "B", fill = "Pass QC"
+    y = "Ratio Nuc-Free/Mono-Nuc", title = "B", fill = "Pass QC"
   ) +
   pub_theme +  theme_bw(12)+
   theme(axis.title = element_text(size = 14), legend.position = "bottom",
