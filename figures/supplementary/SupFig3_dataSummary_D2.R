@@ -12,8 +12,6 @@ suppressWarnings(suppressPackageStartupMessages({
   library(scales)
 }))
 
-
-
 ## Universal theme for plotting ## 
 
 pub_theme <- theme_classic(base_size = 12) +
@@ -42,7 +40,7 @@ pbc1Thres <- 0.7
 pbc2Thres <- 1
 
 ## Load file with QC Stage 1 results ##
-qcStats <- read.csv("qcStage1Results_D2.csv") 
+qcStats <- read.csv("./data/qcStage1Results_D2.csv") 
 
 # ########################## Sup Fig 3.a #################
 # Histogram of number of reads before QC per sample 
@@ -106,7 +104,7 @@ p3d <- ggplot(eMetrics_h, aes(x = NRF, fill = qcpass)) +
   geom_histogram(bins = 100) +
   scale_fill_manual(values = col_vals_pass) +
   labs(x = 'NRF', y = "Number of samples", title = "D", fill = "PASS") +
-  pub_theme + geom_vline(xintercept = 0.7, color = "red")+ theme(
+  pub_theme + geom_vline(xintercept = nrfThres, color = "red")+ theme(
     legend.position = "none"
   )
 
@@ -120,8 +118,8 @@ eMetrics_f$qcpass <- ifelse(eMetrics_f$PBC1 > pbc1Thres, "TRUE", "FALSE")
 p3e<- ggplot(eMetrics_f, aes(x = PBC1, fill = qcpass)) +
   geom_histogram(bins = 100) +
   scale_fill_manual(values = col_vals_pass) +
-  labs(x = 'PBC1', y = "Number of samples", title = "E", fill = "PASS Stage 1 QC") +
-  pub_theme + geom_vline(xintercept = 0.7, color = "red")
+  labs(x = 'PBC1', y = "Number of samples", title = "E", fill = "PASS") +
+  pub_theme + geom_vline(xintercept =pbc1Thres, color = "red")
 
 # ########################## Sup Fig 3.f #################
 # Histogram of PBC2 metric per sample
@@ -134,7 +132,7 @@ p3f <- ggplot(eMetrics_g, aes(x = PBC2, fill = qcpass)) +
   geom_histogram(bins = 100) +
   scale_fill_manual(values = col_vals_pass) +
   labs(x = 'PBC2', y = "Number of samples", title = "F", fill = "PASS") +
-  pub_theme + geom_vline(xintercept = 1, color = "red")
+  pub_theme + geom_vline(xintercept = pbc2Thres, color = "red")
 
 # ########################## Sup Fig 3.g #################
 # Histogram of %NFR metric per sample
@@ -146,8 +144,8 @@ propNuc_j$qcpass <- ifelse(qcStats$NFR > nucfThres, "TRUE", "FALSE")
 p3g <- ggplot(propNuc_j, aes(x = NFR, fill = qcpass)) +
   geom_histogram(bins = 100) +
   scale_fill_manual(values = col_vals_pass) +
-  labs(x = 'NFR fragments', y = "Number of samples", title = "G", fill = "PASS") +
-  pub_theme + geom_vline(xintercept = 0.25, color = "red") + 
+  labs(x = 'Nuc-Free fragments', y = "Number of samples", title = "G", fill = "PASS") +
+  pub_theme + geom_vline(xintercept = nucfThres, color = "red") + 
   theme(legend.position = "none")
 
 # ########################## Sup Fig 3.h #################
@@ -155,13 +153,13 @@ p3g <- ggplot(propNuc_j, aes(x = NFR, fill = qcpass)) +
 # Samples coloured by pass/fail based on threshold (>0.2), shown as vertical red line
 
 propNuc_k <-qcStats
-propNuc_k$qcpass <- ifelse(qcStats$Mono > 0.2, "TRUE", "FALSE")
+propNuc_k$qcpass <- ifelse(qcStats$Mono > monoThres, "TRUE", "FALSE")
 
 p3h <- ggplot(propNuc_k, aes(x = Mono, fill = qcpass)) +
   geom_histogram(bins = 100) +
   scale_fill_manual(values = col_vals_pass) +
-  labs(x = 'MNC fragments', y = "Number of samples", title = "H", fill = "PASS") +
-  pub_theme + geom_vline(xintercept = 0.2, color = "red")
+  labs(x = 'Mono-Nuc fragments', y = "Number of samples", title = "H", fill = "PASS") +
+  pub_theme + geom_vline(xintercept = monoThres, color = "red")
 
 ## Combine all plots for figure ##
 p3c <- p3c + theme(legend.position = "none")
