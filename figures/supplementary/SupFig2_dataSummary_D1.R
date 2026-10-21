@@ -40,7 +40,7 @@ pbc1Thres <- 0.7
 pbc2Thres <- 1
 
 ## Load file with QC Stage 1 results ##
-qcStats <- read.csv("qcStage1Results.csv") 
+qcStats <- read.csv("./data/qcStage1Results.csv") 
 
 # ########################## Sup Fig 2.a #################
 # Histogram of number of reads before QC per sample 
@@ -170,7 +170,7 @@ propNuc_j$qcpass <- ifelse(propNuc_j$NFR > nucfThres, "TRUE", "FALSE")
 p2j <- ggplot(propNuc_j, aes(x = NFR, fill = qcpass)) +
   geom_histogram(bins = 100) +
   scale_fill_manual(values = col_vals_pass) +
-  labs(x = 'NFR fragments', y = "Number of samples", title = "J", fill = "PASS") +
+  labs(x = 'Nuc-Free fragments', y = "Number of samples", title = "J", fill = "PASS") +
   pub_theme + geom_vline(xintercept = nucfThres, color = "red") + 
   theme(legend.position = "none")
 
@@ -184,7 +184,7 @@ propNuc_k$qcpass <- ifelse(propNuc_k$MNC > monoThres, "TRUE", "FALSE")
 p2k <- ggplot(propNuc_k, aes(x = MNC, fill = qcpass)) +
   geom_histogram(bins = 100) +
   scale_fill_manual(values = col_vals_pass) +
-  labs(x = 'MNC fragments', y = "Number of samples", title = "K", fill = "PASS") +
+  labs(x = 'Mono-Nuc fragments', y = "Number of samples", title = "K", fill = "PASS") +
   pub_theme + geom_vline(xintercept = monoThres, color = "red")
 
 ## combine all plots for figure ##
