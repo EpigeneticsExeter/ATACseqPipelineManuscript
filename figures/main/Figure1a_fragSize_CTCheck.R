@@ -81,7 +81,7 @@ propNucleosomesAll <-as.data.frame(propNucleosomesAll)
 
 ## plot nucleosome periodicity
 propNucleosomesAll.2 <-as.data.frame(propNucleosomesAll)
-colnames(propNucleosomesAll.2) <- c("NFR", "Mono", "Di", "Tri", "Quad")
+colnames(propNucleosomesAll.2) <- c("Nuc-Free", "Mono-Nuc", "Di", "Tri", "Quad")
 propNucleosomesAll.2$fraction <- pheno[match(rownames(propNucleosomesAll.2), pheno$sampleID),]$fraction
 propNucleosomesAll.2$cohort <- pheno[match(rownames(propNucleosomesAll.2), pheno$sampleID),]$cohort
 propNucleosomesAll.2$sequencingBatch <- pheno[match(rownames(propNucleosomesAll.2), pheno$sampleID),]$sequencingBatch
@@ -98,7 +98,7 @@ melt.df$FragSize <- as.factor(melt.df$FragSize)
 
 melt.df$FragSize <- factor(
   melt.df$FragSize,
-  levels = c("NFR", "Mono", "Di", "Tri", "Quad")
+  levels = c("Nuc-Free", "Mono-Nuc", "Di", "Tri", "Quad")
 )
 
 # ########################## Fig 1.a1 ###########################################
@@ -139,8 +139,8 @@ p1a2 <- ggplot(melt.df,aes(x=FragSize, y=percentage,fill = passQC1))+
   geom_boxplot(width = 0.15,
              position = position_dodge(width = 0.9),
              outlier.shape = NA)+
-    scale_fill_manual(values = pass_fail_cols)+ #c("FALSE" = "#CD5555","TRUE" = "#008B00")) +
-    labs(y = "Proportion of reads", x = "Fragment size classification", fill = "Pass Stage 1 QC")+
+    scale_fill_manual(values = pass_fail_cols)+ 
+    labs(y = "Proportion of reads", x = "Fragment size classification", fill = "PASS Nuc-Free/Mono-Nuc")+
    stat_summary(
     fun = median,
     geom = "point",
