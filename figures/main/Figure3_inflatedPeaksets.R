@@ -2,10 +2,12 @@
 ##       Figure 3      ##
 #########################
 
-library(tidyr)
-library(dplyr)
-library(GenomicRanges)
-library(patchwork)
+suppressWarnings(suppressPackageStartupMessages({
+  library(tidyr)
+  library(dplyr)
+  library(GenomicRanges)
+  library(patchwork)
+}))
 
 groupsPeaks <-"path/To/peak/files"
 
