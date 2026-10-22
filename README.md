@@ -5,6 +5,8 @@ from raw reads to high confidence peak sets* paper.
 
 Full pipeline can be accessed from: [BrainFANS](https://github.com/ejh243/BrainFANS/tree/master/sequencing/ATACSeq)
 
+# Abstract
+
 # Citation
 
 If you use PIPPA, please cite: 
